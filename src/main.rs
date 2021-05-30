@@ -1,4 +1,4 @@
-
+use Ray_tracing::{Color, Point3, Vec3};
 fn main() {
     const IMAGE_WIDTH: u32 = 256;
     const IMAGE_HEIGHT: u32 = 256;
@@ -9,19 +9,15 @@ fn main() {
             let r = i as f64 / (IMAGE_WIDTH - 1) as f64;
             let g = j as f64 / (IMAGE_HEIGHT - 1) as f64;
             let b = 0.25;
-
-            let ir = (255.999 * r) as i32;
-            let ig = (255.999 * g) as i32;
-            let ib = (255.999 * b) as i32;
-            print!("{} {} {}\n", ir, ig, ib);
+            let pixel_color = Color::new(r, g, b);
+            write_color(pixel_color)
         }
     }
 }
-struct Vec3 {
-    e: Vec<f64>,
-}
-impl Vec3 {
-    fn new(&this){
 
-    }
+fn write_color(pixel_color: Color) {
+    let cr = (255.999 * pixel_color.x()) as i32;
+    let cg = (255.999 * pixel_color.y()) as i32;
+    let cb = (255.999 * pixel_color.z()) as i32;
+    print!("{} {} {}\n", cr, cg, cb);
 }
