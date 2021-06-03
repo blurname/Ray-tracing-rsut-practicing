@@ -1,5 +1,5 @@
-use std::ops::{self, Mul};
-#[derive(Debug)]
+use std::ops::{self};
+#[derive(Debug, Copy)]
 pub struct Vec3 {
     x: f64,
     y: f64,
@@ -10,6 +10,15 @@ impl PartialEq for Vec3 {
         self.x == other.x && self.y == other.y && self.z == other.z
     }
 }
+impl Clone for Vec3 {
+    fn clone(&self) -> Self {
+        Vec3 {
+            x: self.x,
+            y: self.y,
+            z: self.z,
+        }
+    }
+}
 impl Vec3 {
     pub fn zeros() -> Vec3 {
         Vec3 {
@@ -18,6 +27,7 @@ impl Vec3 {
             z: 0.0,
         }
     }
+
     pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
         Vec3 { x, y, z }
     }
@@ -148,6 +158,41 @@ fn test() {
     assert_eq!(dot(&a, &b), 6.0);
     // println!("{:?}", ac + ab)
     assert_eq!(c, Vec3::new(2.0, 3.0, 4.0));
-    assert_eq!(e.x(), 0.1)
+    assert_eq!(e.x(), 0.1);
     // assert_eq!(ac + ab, Vec3::new(2.0, 3.0, 4.0));
+}
+
+#[derive(Debug)]
+pub struct Ray {
+    orig: Point3,
+    dir: Vec3,
+}
+impl Ray {
+    pub fn new(origin: &Point3, direction: &Vec3) -> Ray {
+        Ray {
+            orig: *origin,
+            dir: *direction,
+        }
+    }
+    pub fn origin(&self) -> &Point3 {
+        &self.orig
+    }
+    pub fn direction(&self) -> &Vec3 {
+        &self.dir
+    }
+    pub fn at(&self, t: f64) -> Point3 {
+        &self.orig + &(t * &self.dir)
+    }
+}
+#[test]
+fn testRay() {
+    let a = Vec3::new(1.0, 2.0, 3.0);
+    let b = Vec3::new(1.0, 1.0, 1.0);
+    let ray = Ray::new(&a, &b);
+    let c = ray.origin();
+    let d = ray.direction();
+    let e = ray.at(2.0);
+    assert_eq!(&a.x(), &c.x());
+    assert_eq!(&b.x(), &d.x());
+    assert_eq!(e.y(), 4.0);
 }
